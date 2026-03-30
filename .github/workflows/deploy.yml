@@ -1,0 +1,26 @@
+name: Deploy site
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build 11ty site
+        run: |
+          npm install
+          npx @11ty/eleventy
+
+      - name: Deploy to node5
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.NODE5_IP }}
+          username: fin
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          source: "_site/"
+          target: "/home/fin/site/_site"
+          strip_components: 1
