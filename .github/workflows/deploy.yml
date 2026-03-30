@@ -20,17 +20,12 @@ jobs:
         with:
           authkey: ${{ secrets.TAILSCALE_AUTHKEY }}
 
-      - name: Setup SSH
-        env:
-          SSH_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
-        run: |
-          mkdir -p ~/.ssh
-          echo "$SSH_KEY" | base64 -d > ~/.ssh/id_ed25519
-          chmod 600 ~/.ssh/id_ed25519
-          head -1 ~/.ssh/id_ed25519
-          tail -1 ~/.ssh/id_ed25519
-          ssh-keyscan -H 100.67.97.6 >> ~/.ssh/known_hosts
-
       - name: Deploy to node5
-        run: |
-          scp -r _site/* fin@100.67.97.6:/home/fin/site/_site/
+        uses: burnett01/rsync-deployments@7.0.1
+        with:
+          switches: -avzr --delete
+          path: _site/
+          remote_path: /home/fin/site/_site/
+          remote_host: 100.67.97.6
+          remote_user: fin
+          remote_key: ${{ secrets.SSH_PRIVATE_KEY }}
