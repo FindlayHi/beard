@@ -27,6 +27,8 @@ jobs:
           mkdir -p ~/.ssh
           echo "$SSH_KEY" | base64 -d > ~/.ssh/id_ed25519
           chmod 600 ~/.ssh/id_ed25519
+          head -1 ~/.ssh/id_ed25519
+          tail -1 ~/.ssh/id_ed25519
           ssh-keyscan -H 100.67.97.6 >> ~/.ssh/known_hosts
 
       - name: Deploy to node5
