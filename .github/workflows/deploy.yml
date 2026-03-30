@@ -24,3 +24,4 @@ jobs:
           source: "_site/"
           target: "/home/fin/site/_site"
           strip_components: 1
+          debug: true
